@@ -10,6 +10,8 @@ let Products = require('./schema');
 app.use(cors());
 app.use(express.json());
 
+const port = process.env.PORT || 5000;
+
 mongoose.connect(process.env.ATLAS_URI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
@@ -67,4 +69,4 @@ app.delete('/:id', (req, res) => {
 		.catch((err) => res.status(400).json('Error:' + err));
 });
 
-app.listen(3000, () => console.log('Example app is listening on port 3000.'));
+app.listen(port, () => console.log('Example app is listening on port 3000.'));
