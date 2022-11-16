@@ -10,8 +10,6 @@ let Products = require('./schema');
 app.use(cors());
 app.use(express.json());
 
-const port = process.env.PORT || 5000;
-
 mongoose.connect(process.env.ATLAS_URI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
@@ -21,7 +19,7 @@ connection.once('open', () => {
 	console.log('MongoDB database connection established successfully');
 });
 
-app.get('/node-js-app-interview.git', (req, res) => {
+app.get('/', (req, res) => {
 	Products.find()
 		.sort({ UpdateDate: -1 })
 		.then((products) => {
@@ -30,7 +28,7 @@ app.get('/node-js-app-interview.git', (req, res) => {
 		.catch((err) => res.status(400).json('Error:' + err));
 });
 
-app.get('/node-js-app-interview.git/:id', (req, res) => {
+app.get('/:id', (req, res) => {
 	Products.find({ email: req.params })
 		.sort({ UpdateDate: -1 })
 		.then((products) => {
@@ -39,7 +37,7 @@ app.get('/node-js-app-interview.git/:id', (req, res) => {
 		.catch((err) => res.status(400).json('Error:' + err));
 });
 
-app.post('/node-js-app-interview.git', (req, res) => {
+app.post('/', (req, res) => {
 	const newProductBody = req.body;
 	const newProduct = new Products(newProductBody);
 	newProduct
@@ -50,7 +48,7 @@ app.post('/node-js-app-interview.git', (req, res) => {
 		.catch((err) => res.status(400).json('Error:' + err));
 });
 
-app.put('/node-js-app-interview.git/:id', (req, res) => {
+app.put('/:id', (req, res) => {
 	const newProductBody = req.body;
 	const productID = req.params.id;
 
@@ -59,7 +57,7 @@ app.put('/node-js-app-interview.git/:id', (req, res) => {
 		.catch((err) => res.status(400).json('Error:' + err));
 });
 
-app.delete('/node-js-app-interview.git/:id', (req, res) => {
+app.delete('/:id', (req, res) => {
 	Products.deleteOne({
 		_id: req.params.id
 	})
@@ -69,4 +67,6 @@ app.delete('/node-js-app-interview.git/:id', (req, res) => {
 		.catch((err) => res.status(400).json('Error:' + err));
 });
 
-app.listen(port, () => console.log('Example app is listening on port 3000.'));
+app.listen(process.env.PORT || 5000, () =>
+	console.log('Example app is listening on port 3000.')
+);
