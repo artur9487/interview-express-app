@@ -21,7 +21,7 @@ connection.once('open', () => {
 	console.log('MongoDB database connection established successfully');
 });
 
-app.get('/', (req, res) => {
+app.get('/node-js-app-interview.git', (req, res) => {
 	Products.find()
 		.sort({ UpdateDate: -1 })
 		.then((products) => {
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 		.catch((err) => res.status(400).json('Error:' + err));
 });
 
-app.get('/:id', (req, res) => {
+app.get('/node-js-app-interview.git/:id', (req, res) => {
 	Products.find({ email: req.params })
 		.sort({ UpdateDate: -1 })
 		.then((products) => {
@@ -39,7 +39,7 @@ app.get('/:id', (req, res) => {
 		.catch((err) => res.status(400).json('Error:' + err));
 });
 
-app.post('/', (req, res) => {
+app.post('/node-js-app-interview.git', (req, res) => {
 	const newProductBody = req.body;
 	const newProduct = new Products(newProductBody);
 	newProduct
@@ -50,7 +50,7 @@ app.post('/', (req, res) => {
 		.catch((err) => res.status(400).json('Error:' + err));
 });
 
-app.put('/:id', (req, res) => {
+app.put('/node-js-app-interview.git/:id', (req, res) => {
 	const newProductBody = req.body;
 	const productID = req.params.id;
 
@@ -59,7 +59,7 @@ app.put('/:id', (req, res) => {
 		.catch((err) => res.status(400).json('Error:' + err));
 });
 
-app.delete('/:id', (req, res) => {
+app.delete('/node-js-app-interview.git/:id', (req, res) => {
 	Products.deleteOne({
 		_id: req.params.id
 	})
