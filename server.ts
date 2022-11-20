@@ -1,6 +1,7 @@
 /** @format */
 
 const express = require('express');
+const { Express } = require('express');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -19,25 +20,35 @@ connection.once('open', () => {
 	console.log('MongoDB database connection established successfully');
 });
 
-app.get('/', (req, res) => {
+/*interface productsSchema {
+	Name: String;
+	Price: Number;
+	UpdateDate: Date;
+}*/
+
+/*interface paramsSchema {
+	params: String;
+}*/
+
+app.get('/', (req: any, res: any) => {
 	Products.find()
 		.sort({ UpdateDate: -1 })
-		.then((products) => {
+		.then((products: any) => {
 			return res.json(products);
 		})
-		.catch((err) => res.status(400).json('Error:' + err));
+		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
-app.get('/:id', (req, res) => {
+app.get('/:id', (req: any, res: any) => {
 	Products.find({ email: req.params })
 		.sort({ UpdateDate: -1 })
-		.then((products) => {
+		.then((products: any) => {
 			return res.json(products);
 		})
-		.catch((err) => res.status(400).json('Error:' + err));
+		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
-app.post('/', (req, res) => {
+app.post('/', (req: any, res: any) => {
 	const newProductBody = req.body;
 	const newProduct = new Products(newProductBody);
 	newProduct
@@ -45,28 +56,28 @@ app.post('/', (req, res) => {
 		.then(() => {
 			return res.json('product Added');
 		})
-		.catch((err) => res.status(400).json('Error:' + err));
+		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
-app.put('/:id', (req, res) => {
+app.put('/:id', (req: any, res: any) => {
 	const newProductBody = req.body;
 	const productID = req.params.id;
 
 	Products.replaceOne({ _id: productID }, newProductBody)
 		.then(() => res.json('product Updated'))
-		.catch((err) => res.status(400).json('Error:' + err));
+		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
-app.delete('/:id', (req, res) => {
+app.delete('/:id', (req: any, res: any) => {
 	Products.deleteOne({
 		_id: req.params.id
 	})
 		.then(() => {
 			return res.json('product deleted');
 		})
-		.catch((err) => res.status(400).json('Error:' + err));
+		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
 app.listen(process.env.PORT || 5000, () =>
-	console.log('Example app is listening on port 3000.')
+	console.log('Example app is listening on port 5000.')
 );
