@@ -20,26 +20,41 @@ connection.once('open', () => {
 	console.log('MongoDB database connection established successfully');
 });
 
+interface allProductsSchema {
+	Name: String;
+	id: String;
+}
+
+interface singleProductSchema extends allProductsSchema {
+	Price: Number;
+	UpdateDate: Date;
+}
+
 app.get('/', (req: Request, res: Response) => {
 	Products.find()
 		.sort({ UpdateDate: -1 })
-		.then((products: any) => {
-			return res.json(products);
+		.then((products: allProductsSchema[]) => {
+			const productsList: { Name: String; id: String }[] = products.map(
+				(item: allProductsSchema) => {
+					return { Name: item.Name, id: item.id };
+				}
+			);
+			return res.json(productsList);
 		})
 		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
 app.get('/:id', (req: Request, res: Response) => {
-	Products.find({ email: req.params })
+	Products.find({ _id: req.params.id })
 		.sort({ UpdateDate: -1 })
-		.then((products: any) => {
+		.then((products: singleProductSchema) => {
 			return res.json(products);
 		})
 		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
 app.post('/', (req: Request, res: Response) => {
-	const newProductBody = req.body;
+	const newProductBody = { ...req.body, UpdateDate: new Date() };
 	const newProduct = new Products(newProductBody);
 	newProduct
 		.save()
@@ -50,7 +65,7 @@ app.post('/', (req: Request, res: Response) => {
 });
 
 app.put('/:id', (req: Request, res: Response) => {
-	const newProductBody = req.body;
+	const newProductBody = { ...req.body, UpdateDate: new Date() };
 	const productID = req.params.id;
 
 	Products.replaceOne({ _id: productID }, newProductBody)

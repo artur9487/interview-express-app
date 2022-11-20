@@ -21,12 +21,15 @@ app.get('/', (req, res) => {
     Products.find()
         .sort({ UpdateDate: -1 })
         .then((products) => {
-        return res.json(products);
+        const productsList = products.map((item) => {
+            return { Name: item.Name, id: item.id };
+        });
+        return res.json(productsList);
     })
         .catch((err) => res.status(400).json('Error:' + err));
 });
 app.get('/:id', (req, res) => {
-    Products.find({ email: req.params })
+    Products.find({ _id: req.params.id })
         .sort({ UpdateDate: -1 })
         .then((products) => {
         return res.json(products);
@@ -34,7 +37,7 @@ app.get('/:id', (req, res) => {
         .catch((err) => res.status(400).json('Error:' + err));
 });
 app.post('/', (req, res) => {
-    const newProductBody = req.body;
+    const newProductBody = Object.assign(Object.assign({}, req.body), { UpdateDate: new Date() });
     const newProduct = new Products(newProductBody);
     newProduct
         .save()
@@ -44,7 +47,7 @@ app.post('/', (req, res) => {
         .catch((err) => res.status(400).json('Error:' + err));
 });
 app.put('/:id', (req, res) => {
-    const newProductBody = req.body;
+    const newProductBody = Object.assign(Object.assign({}, req.body), { UpdateDate: new Date() });
     const productID = req.params.id;
     Products.replaceOne({ _id: productID }, newProductBody)
         .then(() => res.json('product Updated'))
