@@ -1,8 +1,8 @@
 /** @format */
 
 const express = require('express');
-const { Express } = require('express');
-const app = express();
+import { Express, Request, Response } from 'express';
+const app: Express = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -20,17 +20,7 @@ connection.once('open', () => {
 	console.log('MongoDB database connection established successfully');
 });
 
-/*interface productsSchema {
-	Name: String;
-	Price: Number;
-	UpdateDate: Date;
-}*/
-
-/*interface paramsSchema {
-	params: String;
-}*/
-
-app.get('/', (req: any, res: any) => {
+app.get('/', (req: Request, res: Response) => {
 	Products.find()
 		.sort({ UpdateDate: -1 })
 		.then((products: any) => {
@@ -39,7 +29,7 @@ app.get('/', (req: any, res: any) => {
 		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
-app.get('/:id', (req: any, res: any) => {
+app.get('/:id', (req: Request, res: Response) => {
 	Products.find({ email: req.params })
 		.sort({ UpdateDate: -1 })
 		.then((products: any) => {
@@ -48,7 +38,7 @@ app.get('/:id', (req: any, res: any) => {
 		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
-app.post('/', (req: any, res: any) => {
+app.post('/', (req: Request, res: Response) => {
 	const newProductBody = req.body;
 	const newProduct = new Products(newProductBody);
 	newProduct
@@ -59,7 +49,7 @@ app.post('/', (req: any, res: any) => {
 		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
-app.put('/:id', (req: any, res: any) => {
+app.put('/:id', (req: Request, res: Response) => {
 	const newProductBody = req.body;
 	const productID = req.params.id;
 
@@ -68,7 +58,7 @@ app.put('/:id', (req: any, res: any) => {
 		.catch((err: string) => res.status(400).json('Error:' + err));
 });
 
-app.delete('/:id', (req: any, res: any) => {
+app.delete('/:id', (req: Request, res: Response) => {
 	Products.deleteOne({
 		_id: req.params.id
 	})
